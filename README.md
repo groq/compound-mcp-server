@@ -25,6 +25,25 @@ Refer to the official [MCP Quickstart for Server Developers](https://docs.modelc
 
 When configuring your client, use the command `npx groq-compound-mcp-server` or `groq-compound-mcp-server` (if installed globally) to run this server.
 
+Here's an example of how you might configure an MCP client (e.g., in a `settings.json` file) to launch this server:
+
+```json
+{
+  "mcpServers": {
+    "groq-compound": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "groq-compound-mcp-server"
+      ],
+      "env": {
+        "GROQ_API_KEY": "YOUR_GROQ_API_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
 ## License
 
 [MIT](LICENSE) 
