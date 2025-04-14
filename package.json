@@ -1,0 +1,45 @@
+{
+  "name": "groq-compound-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for interacting with Groq models",
+  "main": "build/index.js",
+  "type": "module",
+  "bin": {
+    "groq-compound-mcp-server": "build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod 755 build/index.js",
+    "test": "tsx --test src/**/*.test.ts"
+  },
+  "keywords": [
+    "mcp",
+    "groq",
+    "compound"
+  ],
+  "author": "Rick Lamers",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/groq/compound-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/groq/compound-mcp-server/issues"
+  },
+  "homepage": "https://github.com/groq/compound-mcp-server#readme",
+  "files": [
+    "build"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.9.0",
+    "groq-sdk": "^0.3.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "tsx": "^4.19.3",
+    "typescript": "^5.4.5"
+  }
+}
