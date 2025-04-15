@@ -21,7 +21,7 @@ npm install groq-compound-mcp-server
 
 This server follows the standard MCP server pattern using stdio for transport. It's designed to be run by an MCP client (like Claude Desktop or a custom client).
 
-Refer to the official [MCP Quickstart for Server Developers](https://docs.modelcontext.dev/get-started/quickstart-server-developers) for instructions on setting up and connecting MCP servers.
+Refer to the official [MCP Quickstart for Server Developers]([https://docs.modelcontext.dev/get-started/quickstart-server-developers](https://modelcontextprotocol.io/quickstart/server)) for instructions on setting up and connecting MCP servers.
 
 When configuring your client, use the command `npx groq-compound-mcp-server` or `groq-compound-mcp-server` (if installed globally) to run this server.
 
