@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import {
   realtimeToolArgsSchema,
   replToolArgsSchema
-} from './index.js'; // Import the exported Zod schemas
+} from './server.js'; // Import the exported Zod schemas
 
 test('Tool Argument Schemas', async (t) => {
 
