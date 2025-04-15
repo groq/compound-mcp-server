@@ -15,6 +15,7 @@ export const realtimeToolArgsSchema = z.object({
   model: ModelEnum.optional()
     .default("compound-beta")
     .describe("The model to use (compound-beta or compound-beta-mini). Defaults to compound-beta. Use compound-beta-mini for quick answers."),
+  verbose: z.boolean().optional().default(false).describe("If true, includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
 });
 
 export const replToolArgsSchema = z.object({
@@ -22,10 +23,11 @@ export const replToolArgsSchema = z.object({
     model: ModelEnum.optional()
       .default("compound-beta")
       .describe("The model to use (compound-beta or compound-beta-mini). Defaults to compound-beta. Use compound-beta-mini for quick answers."),
+    verbose: z.boolean().optional().default(false).describe("If true, includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
   });
 
 // Type alias for the arguments
-type ToolArgs = z.infer<typeof realtimeToolArgsSchema>;
+type ToolArgs = z.infer<typeof realtimeToolArgsSchema> | z.infer<typeof replToolArgsSchema>;
 
 // Helper function to execute Groq chat completion
 async function executeGroqQuery(args: ToolArgs) {
@@ -42,15 +44,26 @@ async function executeGroqQuery(args: ToolArgs) {
       model: args.model
     });
 
-    const responseText = chatCompletion.choices[0]?.message?.content || "No response from model.";
-    // For now we're not including the executed tools in the response
-    // const executedTools = (chatCompletion.choices[0]?.message as any)?.executed_tools ?? null;
+    const choice = chatCompletion.choices[0]?.message;
+    const responseTextContent = choice?.content || "No response from model.";
+    let finalResponseText = responseTextContent;
+
+    // Check if verbose flag is true
+    if ('verbose' in args && args.verbose) {
+      // Use the logic to get executed_tools
+      const executedTools = (choice as any)?.executed_tools ?? null;
+      const responsePayload = {
+          answer: responseTextContent,
+          executed_tools: executedTools
+      };
+      finalResponseText = JSON.stringify(responsePayload, null, 2); // Pretty print JSON
+    }
 
     return {
       content: [
         {
           type: "text" as const,
-          text: responseText,
+          text: finalResponseText, // Use the potentially modified response text
         },
       ],
     };
