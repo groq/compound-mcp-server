@@ -3,6 +3,7 @@ import { z } from "zod";
 import Groq from "groq-sdk";
 
 const ModelEnum = z.enum(["compound-beta", "compound-beta-mini"]);
+const ModeEnum = z.enum(["minimal", "verbose"]);
 
 // Define Tool Schemas
 export const realtimeToolArgsSchema = z.object({
@@ -10,7 +11,9 @@ export const realtimeToolArgsSchema = z.object({
   model: ModelEnum.optional()
     .default("compound-beta")
     .describe("The model to use (compound-beta or compound-beta-mini). Defaults to compound-beta. Use compound-beta-mini for quick answers."),
-  verbose: z.boolean().optional().default(false).describe("Optional (default: false). If true, includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
+  mode: ModeEnum.optional().default("minimal").describe("Response mode ('minimal' or 'verbose'). Defaults to 'minimal'. 'verbose' includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
+  include_domains: z.array(z.string()).optional().describe("List of domains to specifically include in the search."),
+  exclude_domains: z.array(z.string()).optional().describe("List of domains to exclude from the search."),
 });
 
 export const replToolArgsSchema = z.object({
@@ -18,7 +21,9 @@ export const replToolArgsSchema = z.object({
     model: ModelEnum.optional()
       .default("compound-beta")
       .describe("The model to use (compound-beta or compound-beta-mini). Defaults to compound-beta. Use compound-beta-mini for quick answers."),
-    verbose: z.boolean().optional().default(false).describe("Optional (default: false). If true, includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
+    mode: ModeEnum.optional().default("minimal").describe("Response mode ('minimal' or 'verbose'). Defaults to 'minimal'. 'verbose' includes executed tools in the response. This is very verbose and should only be used when the user asks for it or when the user query cannot be answered without it (always first try without it)."),
+    include_domains: z.array(z.string()).optional().describe("List of domains to specifically include in the search."),
+    exclude_domains: z.array(z.string()).optional().describe("List of domains to exclude from the search."),
   });
 
 // Type alias for the arguments
@@ -36,7 +41,10 @@ async function executeGroqQuery(args: ToolArgs) {
           content: args.question,
         },
       ],
-      model: args.model
+      model: args.model,
+      // Add include_domains and exclude_domains if they exist in args
+      ...(args.include_domains && { include_domains: args.include_domains }),
+      ...(args.exclude_domains && { exclude_domains: args.exclude_domains }),
     });
 
     const choice = chatCompletion.choices[0]?.message;
@@ -44,7 +52,7 @@ async function executeGroqQuery(args: ToolArgs) {
     let finalResponseText = responseTextContent;
 
     // Check if verbose flag is true
-    if ('verbose' in args && args.verbose) {
+    if ('mode' in args && args.mode === 'verbose') {
       // Use the logic to get executed_tools
       const executedTools = (choice as any)?.executed_tools ?? null;
       const responsePayload = {
