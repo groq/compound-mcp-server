@@ -8,7 +8,7 @@
     "groq-compound-mcp-server": "build/index.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.stdio.json && chmod 755 build/index.js",
+    "build": "next build && tsc -p tsconfig.stdio.json && chmod 755 build/index.js",
     "test": "tsx --test src/**/*.test.ts",
     "dev:vercel": "next dev",
     "build:vercel": "next build",
