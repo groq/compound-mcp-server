@@ -8,8 +8,11 @@
     "groq-compound-mcp-server": "build/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js",
-    "test": "tsx --test src/**/*.test.ts"
+    "build": "tsc -p tsconfig.stdio.json && chmod 755 build/index.js",
+    "test": "tsx --test src/**/*.test.ts",
+    "dev:vercel": "next dev",
+    "build:vercel": "next build",
+    "start:vercel": "next start"
   },
   "keywords": [
     "mcp",
@@ -33,13 +36,18 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.9.0",
+    "@modelcontextprotocol/sdk": "1.10.2",
     "groq-sdk": "^0.3.3",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@vercel/mcp-adapter": "^0.3.1",
+    "next": "^14.2.3",
+    "redis": "^4.6.13"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
+    "@types/react": "^18.3.3",
     "tsx": "^4.19.3",
     "typescript": "^5.4.5"
-  }
+  },
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f"
 }

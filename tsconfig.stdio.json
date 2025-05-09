@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "plugins": []
+  },
+  "include": [
+    "src/server.ts",
+    "src/index.ts"
+    // Add any other specific files for the stdio server here if they arise
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "src/app", // Exclude Next.js app directory
+    "next-env.d.ts", // Exclude Next.js type declarations file
+    "src/**/*.test.ts" // Assuming tests are run separately and not part of stdio build output
+  ]
+} 

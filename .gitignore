@@ -31,3 +31,12 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+.next/
+.vercel/
+.vercel/cache/
+.vercel/output/
+.vercel/output/static/
+.vercel/output/standalone/
+
+*.tsbuildinfo
